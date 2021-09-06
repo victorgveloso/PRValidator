@@ -6,7 +6,7 @@ from app.models import Request, Response
 class ResponseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Response
-        fields = ["id", "request", "author", "comment_id", "decision", "comment_url"]
+        fields = ["id", "request", "author", "comment_id", "commit_hash", "decision", "comment_url"]
 
 
 class RequestSerializer(serializers.HyperlinkedModelSerializer):
