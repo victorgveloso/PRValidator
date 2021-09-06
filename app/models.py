@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Request(models.Model):
-    class ProgrammingLanguage(models.TextChoices):
+    class ProgrammingLanguage(models.IntegerChoices):
         UNAVAILABLE = -1, _("Programming Language's info unavailable")
         OTHER = 0, _("Other programming language")
         JAVA = 1, _('Java')

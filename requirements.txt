@@ -1,0 +1,7 @@
+djangorestframework
+django
+pyyaml
+uritemplate
+mysqlclient
+python-dotenv
+django-environ
