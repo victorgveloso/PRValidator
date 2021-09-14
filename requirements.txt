@@ -5,3 +5,4 @@ uritemplate
 mysqlclient
 python-dotenv
 django-environ
+django-db-multitenant

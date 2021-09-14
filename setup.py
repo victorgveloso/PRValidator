@@ -9,5 +9,5 @@ setup(
     author='victor',
     author_email='victorgvbh@gmail.com',
     description='Web API to collect and validate Pull Request for my research',
-    install_requires=["djangorestframework", "django", "pyyaml", "uritemplate","mysqlclient","python-dotenv","django-environ"]
+    install_requires=["djangorestframework", "django", "pyyaml", "uritemplate","mysqlclient","python-dotenv","django-environ","django-db-multitenant"]
 )

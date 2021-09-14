@@ -1,15 +1,27 @@
 from rest_framework import serializers
+from rest_framework.relations import HyperlinkedRelatedField
 
+from app.mapper import extract_tenant_name
 from app.models import Request, Response
 
 
-class ResponseSerializer(serializers.HyperlinkedModelSerializer):
+class CustomHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
+    def get_fields(self):
+        fields = super().get_fields()
+        for field in fields.values():
+            if isinstance(field, HyperlinkedRelatedField):
+                tenant_name = extract_tenant_name(self.context['request'].get_full_path())
+                field.view_name = f'{tenant_name}-{fields["request"].view_name}'
+        return fields
+
+
+class ResponseSerializer(CustomHyperlinkedModelSerializer):
     class Meta:
         model = Response
         fields = ["id", "request", "author", "comment_id", "commit_hash", "decision", "comment_url"]
 
 
-class RequestSerializer(serializers.HyperlinkedModelSerializer):
+class RequestSerializer(CustomHyperlinkedModelSerializer):
     class Meta:
         model = Request
         fields = ["id", "project_owner", "project_repo", "pull_request_id", "comment_text", "language", "url"]

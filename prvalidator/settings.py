@@ -14,6 +14,7 @@ import sys
 from pathlib import Path
 
 import environ
+from environ import ImproperlyConfigured
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -33,6 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['primary157.pythonanywhere.com','127.0.0.1']
 
+MULTITENANT_MAPPER_CLASS = 'app.mapper.SimpleTenantMapper'
 
 # Application definition
 
@@ -48,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'db_multitenant.middleware.MultiTenantMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -80,27 +83,29 @@ WSGI_APPLICATION = 'prvalidator.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-DATABASE_ENGINE = env("DBENGINE")
-
 DATABASES = {}
-if DATABASE_ENGINE == "django.db.backends.sqlite3":
-    DATABASES["default"] = {
-        'ENGINE': DATABASE_ENGINE,
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-elif DATABASE_ENGINE == "django.db.backends.mysql":
-    DATABASES["default"] = {
-        'ENGINE': DATABASE_ENGINE,
-        'NAME': env("DBNAME"),
-        'USER': env("DBUSER"),
-        'PASSWORD': env("DBPSK"),
-        'HOST': env("DBHOST")
-    }
-else:
+try:
+    DATABASE_ENGINE = env("DBENGINE")
+except ImproperlyConfigured:
     DATABASES["default"] = {
         'ENGINE': "django.db.backends.sqlite3",
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+else:
+    if isinstance(DATABASE_ENGINE, str) and len(DATABASE_ENGINE) > 0 and DATABASE_ENGINE != "django.db.backends.sqlite3":
+        DATABASES["default"] = {
+            'ENGINE': DATABASE_ENGINE,
+            'NAME': env("DBNAME"),
+            'USER': env("DBUSER"),
+            'PASSWORD': env("DBPSK"),
+            'HOST': env("DBHOST"),
+            'PORT': env("DBPORT")
+        }
+    else:
+        DATABASES["default"] = {
+            'ENGINE': "django.db.backends.sqlite3",
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
 
 
 # Password validation
@@ -151,3 +156,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10
 }
+
+from db_multitenant.utils import update_from_env
+
+update_from_env(database_settings=DATABASES['default'])

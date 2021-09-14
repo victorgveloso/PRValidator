@@ -20,6 +20,8 @@ class Request(models.Model):
         RUBY = 10, _('Ruby')
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     project_owner = models.CharField(max_length=99)
     project_repo = models.CharField(max_length=99)
     pull_request_id = models.IntegerField()
@@ -44,6 +46,8 @@ class Response(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     request = models.ForeignKey(Request, on_delete=models.CASCADE)
     author = models.CharField(max_length=50)
     comment_id = models.CharField(max_length=50)
