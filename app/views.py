@@ -6,8 +6,12 @@ from app.serializers import RequestSerializer, ResponseSerializer
 
 
 class FieldsFilterMixin(viewsets.ModelViewSet):
+    def ignore_nested_field_access(self, r):
+        return r.split("__")[0]
+
     def extract_fields(self, d: dict):
-        return {k: v for k, v in d.items() if k in self.serializer_class.Meta.model._meta.fields}
+        field_names = [i.name for i in self.serializer_class.Meta.model._meta.get_fields() if hasattr(i, 'name')]
+        return {k: v for k, v in d.items() if self.ignore_nested_field_access(k) in field_names}
 
     def get_queryset(self):
         return self.queryset.filter(**self.extract_fields(self.request.query_params.dict()))
