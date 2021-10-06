@@ -28,7 +28,7 @@ class Request(models.Model):
     comment_text = models.CharField(max_length=2000)
     language = models.IntegerField(choices=ProgrammingLanguage.choices, default=ProgrammingLanguage.UNAVAILABLE)
 
-    def url(self):
+    def github_url(self):
         return f"https://github.com/{self.project_owner}/{self.project_repo}/pull/{self.pull_request_id}"
 
 
@@ -55,4 +55,4 @@ class Response(models.Model):
     decision = models.IntegerField(choices=DECISION_OPTIONS, default=UNDEFINED)
 
     def comment_url(self):
-        return f"{self.request.url()}#{self.comment_id}"
+        return f"{self.request.github_url()}#{self.comment_id}"
