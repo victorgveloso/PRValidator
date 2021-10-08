@@ -27,6 +27,7 @@ class Request(models.Model):
     pull_request_id = models.IntegerField()
     comment_text = models.CharField(max_length=2000)
     language = models.IntegerField(choices=ProgrammingLanguage.choices, default=ProgrammingLanguage.UNAVAILABLE)
+    classification = models.CharField(max_length=99, default=None, blank=True, null=True)
 
     def github_url(self):
         return f"https://github.com/{self.project_owner}/{self.project_repo}/pull/{self.pull_request_id}"
@@ -53,6 +54,7 @@ class Response(models.Model):
     comment_id = models.CharField(max_length=50)
     commit_hash = models.CharField(max_length=50)
     decision = models.IntegerField(choices=DECISION_OPTIONS, default=UNDEFINED)
+    classification = models.CharField(max_length=99, default=None, blank=True, null=True)
 
     def comment_url(self):
         return f"{self.request.github_url()}#{self.comment_id}"

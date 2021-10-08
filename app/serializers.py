@@ -18,10 +18,10 @@ class CustomHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
 class ResponseSerializer(CustomHyperlinkedModelSerializer):
     class Meta:
         model = Response
-        fields = ["id", "request", "author", "comment_id", "commit_hash", "decision", "comment_url", "url", "created_at", "updated_at"]
+        fields = ["id", "request", "author", "comment_id", "commit_hash", "decision", "comment_url", "url", "created_at", "updated_at", "classification"]
 
 
 class RequestSerializer(CustomHyperlinkedModelSerializer):
     class Meta:
         model = Request
-        fields = ["id", "project_owner", "project_repo", "pull_request_id", "comment_text", "language", "github_url", "url", "created_at", "updated_at"]
+        fields = ["id", "project_owner", "project_repo", "pull_request_id", "comment_text", "language", "github_url", "url", "created_at", "updated_at", "classification"]
