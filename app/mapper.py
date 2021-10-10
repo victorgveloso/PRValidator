@@ -1,6 +1,9 @@
 from db_multitenant import mapper
 from django.conf import settings
+from django.core.handlers.wsgi import WSGIRequest
 from django.db import connection
+
+from app.mixins import FieldsFilterMixin
 
 
 def get_default_db_name():
@@ -16,6 +19,8 @@ def extract_tenant_name(full_path):
 
 class SimpleTenantMapper(mapper.TenantMapper):
     def get_tenant_name(self, request):
+        if isinstance(request, FieldsFilterMixin):
+            return self.get_tenant_name(request.request)
         return extract_tenant_name(request.get_full_path())
 
     def get_db_name(self, request, tenant_name):
