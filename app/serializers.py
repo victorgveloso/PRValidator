@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.relations import HyperlinkedRelatedField
 
 from app.mapper import extract_tenant_name
-from app.models import Request, Response
+from app.models import Request, Response, Project, User
 
 
 class CustomHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
@@ -25,3 +25,15 @@ class RequestSerializer(CustomHyperlinkedModelSerializer):
     class Meta:
         model = Request
         fields = ["id", "project_owner", "project_repo", "pull_request_id", "comment_text", "language", "github_url", "url", "created_at", "updated_at", "classification"]
+
+
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Project
+        fields = ["id", "project_owner", "project_repo", "stars", "forks", "issues", "pulls"]
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ["login", "following", "followers", "sponsors", "repositories"]

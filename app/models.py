@@ -58,3 +58,25 @@ class Response(models.Model):
 
     def comment_url(self):
         return f"{self.request.github_url()}#{self.comment_id}"
+
+
+class Project(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    project_owner = models.CharField(max_length=99)
+    project_repo = models.CharField(max_length=99)
+    stars = models.IntegerField()
+    forks = models.IntegerField()
+    issues = models.IntegerField()
+    pulls = models.IntegerField()
+
+    class Meta:
+        unique_together = ('project_owner', 'project_repo',)
+
+
+class User(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    login = models.CharField(max_length=99, unique=True)
+    following = models.IntegerField()
+    followers = models.IntegerField()
+    sponsors = models.IntegerField()
+    repositories = models.IntegerField()

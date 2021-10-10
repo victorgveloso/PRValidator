@@ -2,8 +2,8 @@ from django.http import HttpResponse
 from rest_framework import viewsets
 
 from app.mixins import FieldsFilterMixin
-from app.models import Request, Response
-from app.serializers import RequestSerializer, ResponseSerializer
+from app.models import Request, Response, User, Project
+from app.serializers import RequestSerializer, ResponseSerializer, UserSerializer, ProjectSerializer
 
 
 class RequestViewSet(FieldsFilterMixin):
@@ -14,6 +14,16 @@ class RequestViewSet(FieldsFilterMixin):
 class ResponseViewSet(FieldsFilterMixin):
     serializer_class = ResponseSerializer
     queryset = Response.objects.all()
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    serializer_class = ProjectSerializer
+    queryset = Project.objects.all()
 
 
 def index(req):
