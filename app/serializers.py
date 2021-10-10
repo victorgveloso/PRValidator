@@ -30,10 +30,10 @@ class RequestSerializer(CustomHyperlinkedModelSerializer):
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Project
-        fields = ["id", "project_owner", "project_repo", "stars", "forks", "issues", "pulls"]
+        fields = ["id", "url", "project_owner", "project_repo", "stars", "forks", "issues", "pulls"]
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ["login", "following", "followers", "sponsors", "repositories"]
+        fields = ["id", "url", "login", "following", "followers", "sponsors", "repositories"]

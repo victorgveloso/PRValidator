@@ -1,6 +1,5 @@
 from db_multitenant import mapper
 from django.conf import settings
-from django.core.handlers.wsgi import WSGIRequest
 from django.db import connection
 
 from app.mixins import FieldsFilterMixin
@@ -24,7 +23,13 @@ class SimpleTenantMapper(mapper.TenantMapper):
         return extract_tenant_name(request.get_full_path())
 
     def get_db_name(self, request, tenant_name):
-        return f'{get_default_db_name()}_{tenant_name}'
+        default_db_name = get_default_db_name()
+        if default_db_name.endswith(f"_{tenant_name}"):
+            return default_db_name
+        return f'{default_db_name}_{tenant_name}'
 
     def get_cache_prefix(self, request, tenant_name, db_name):
-        return f'{get_default_db_name()}_{tenant_name}'
+        default_db_name = get_default_db_name()
+        if default_db_name.endswith(f"_{tenant_name}"):
+            return default_db_name
+        return f'{default_db_name}_{tenant_name}'
