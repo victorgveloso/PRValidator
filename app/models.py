@@ -60,6 +60,13 @@ class Response(models.Model):
         return f"{self.request.github_url()}#{self.comment_id}"
 
 
+class MergeCommit(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    response = models.ForeignKey(Response, on_delete=models.CASCADE)
+    commit_hash = models.CharField(max_length=50)
+
+
+
 class Project(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project_owner = models.CharField(max_length=99)

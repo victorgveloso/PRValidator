@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from rest_framework import viewsets
 
 from app.mixins import FieldsFilterMixin
-from app.models import Request, Response, User, Project
-from app.serializers import RequestSerializer, ResponseSerializer, UserSerializer, ProjectSerializer
+from app.models import Request, Response, User, Project, MergeCommit
+from app.serializers import RequestSerializer, ResponseSerializer, UserSerializer, ProjectSerializer, \
+    MergeCommitSerializer
 
 
 class RequestViewSet(FieldsFilterMixin):
@@ -14,6 +15,11 @@ class RequestViewSet(FieldsFilterMixin):
 class ResponseViewSet(FieldsFilterMixin):
     serializer_class = ResponseSerializer
     queryset = Response.objects.all()
+
+
+class MergeCommitViewSet(FieldsFilterMixin):
+    serializer_class = MergeCommitSerializer
+    queryset = MergeCommit.objects.all()
 
 
 class UserViewSet(viewsets.ModelViewSet):

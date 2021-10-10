@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.relations import HyperlinkedRelatedField
 
 from app.mapper import extract_tenant_name
-from app.models import Request, Response, Project, User
+from app.models import Request, Response, Project, User, MergeCommit
 
 
 class CustomHyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,6 +19,12 @@ class ResponseSerializer(CustomHyperlinkedModelSerializer):
     class Meta:
         model = Response
         fields = ["id", "request", "author", "comment_id", "commit_hash", "decision", "comment_url", "url", "created_at", "updated_at", "classification"]
+
+
+class MergeCommitSerializer(CustomHyperlinkedModelSerializer):
+    class Meta:
+        model = MergeCommit
+        fields = ["id", "response", "commit_hash", "url"]
 
 
 class RequestSerializer(CustomHyperlinkedModelSerializer):
