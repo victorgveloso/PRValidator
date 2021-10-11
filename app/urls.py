@@ -4,28 +4,28 @@ from rest_framework import routers
 
 from app import views
 
-routerV1 = routers.DefaultRouter()
-routerV1.register(r'requests', views.RequestViewSet, basename="v1-request")
-routerV1.register(r'responses', views.ResponseViewSet, basename="v1-response")
-routerV1.register(r'mergecommit', views.MergeCommitViewSet, basename="v1-mergecommit")
-routerV2 = routers.DefaultRouter()
-routerV2.register(r'requests', views.RequestViewSet, basename="v2-request")
-routerV2.register(r'responses', views.ResponseViewSet, basename="v2-response")
-routerV2.register(r'responses', views.MergeCommitViewSet, basename="v2-mergecommit")
-routerV3 = routers.DefaultRouter()
-routerV3.register(r'requests', views.RequestViewSet, basename="v3-request")
-routerV3.register(r'responses', views.ResponseViewSet, basename="v3-response")
-routerV3.register(r'mergecommit', views.MergeCommitViewSet, basename="v3-mergecommit")
-users = routers.DefaultRouter()
-users.register(r'', views.UserViewSet)
-projects = routers.DefaultRouter()
-projects.register(r'', views.ProjectViewSet)
+
+def generate_multitenant_router(version):
+    router = routers.DefaultRouter()
+    router.register(r'requests', views.RequestViewSet, basename=f"{version}-request")
+    router.register(r'responses', views.ResponseViewSet, basename=f"{version}-response")
+    router.register(r'mergecommit', views.MergeCommitViewSet, basename=f"{version}-mergecommit")
+    return router
+
+
+def generate_unversioned_routers():
+    r = routers.DefaultRouter()
+    r.register(r'users', views.UserViewSet)
+    r.register(r'projects', views.ProjectViewSet)
+    return r
+
+
 urlpatterns = [
     path(r'', views.index),
-    path(r'v1/', include(routerV1.urls)),
-    path(r'v2/', include(routerV2.urls)),
-    path(r'v3/', include(routerV3.urls)),
-    path(r'users/', include(users.urls)),
-    path(r'projects/', include(projects.urls)),
+    path(r'', include(generate_unversioned_routers().urls)),
+    path(r'v1/', include(generate_multitenant_router("v1").urls)),
+    path(r'v2/', include(generate_multitenant_router("v2").urls)),
+    path(r'v3/', include(generate_multitenant_router("v3").urls)),
+    path(r'v4/', include(generate_multitenant_router("v4").urls)),
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True))
 ]
