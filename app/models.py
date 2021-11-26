@@ -27,6 +27,7 @@ class Request(models.Model):
     pull_request_id = models.IntegerField()
     comment_text = models.CharField(max_length=2000)
     language = models.IntegerField(choices=ProgrammingLanguage.choices, default=ProgrammingLanguage.UNAVAILABLE)
+    tips = models.CharField(max_length=255, default=None, blank=True, null=True)
     classification = models.CharField(max_length=99, default=None, blank=True, null=True)
 
     def github_url(self):

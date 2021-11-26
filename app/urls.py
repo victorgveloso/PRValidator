@@ -27,5 +27,6 @@ urlpatterns = [
     path(r'v2/', include(generate_multitenant_router("v2").urls)),
     path(r'v3/', include(generate_multitenant_router("v3").urls)),
     path(r'v4/', include(generate_multitenant_router("v4").urls)),
+    path(r'v5/', include(generate_multitenant_router("v5").urls)),
     path('favicon.ico', RedirectView.as_view(url='/static/favicon.ico', permanent=True))
 ]
